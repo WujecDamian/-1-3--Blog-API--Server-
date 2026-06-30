@@ -1,0 +1,21 @@
+{
+  "name": "1-3--blog-api--server",
+  "version": "1.0.0",
+  "description": "https://www.theodinproject.com/lessons/node-path-nodejs-blog-api",
+  "keywords": [],
+  "homepage": "https://github.com/WujecDamian/-1-3--Blog-API--Server-#readme",
+  "bugs": {
+    "url": "https://github.com/WujecDamian/-1-3--Blog-API--Server-/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WujecDamian/-1-3--Blog-API--Server-.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
