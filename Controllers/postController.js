@@ -60,4 +60,51 @@ const createPost = async (req, res) => {
   });
 };
 
-export { getAllPosts, getPostById, createComment, createPost };
+const editPost = async (req, res) => {
+  jwt.verify(req.token, process.env.JWT_SECRET, async (err, authData) => {
+    if (err) {
+      res.status(403).json({ message: "Invalid token" });
+    } else {
+      const content = req.body.content;
+      const title = req.body.title;
+      const editedPost = await prisma.post.update({
+        where: { id: Number(req.params.postId) },
+        data: {
+          content,
+          title,
+        },
+      });
+      res.json({
+        message: "Post edited...",
+        post: editedPost,
+        authData,
+      });
+    }
+  });
+};
+
+const deletePost = async (req, res) => {
+  jwt.verify(req.token, process.env.JWT_SECRET, async (err, authData) => {
+    if (err) {
+      res.status(403).json({ message: "Invalid token" });
+    } else {
+      const deletedPost = await prisma.post.update({
+        where: { id: Number(req.params.postId) },
+      });
+      res.json({
+        message: "Post deleted...",
+        post: deletedPost,
+        authData,
+      });
+    }
+  });
+};
+
+export {
+  getAllPosts,
+  getPostById,
+  createComment,
+  createPost,
+  editPost,
+  deletePost,
+};
