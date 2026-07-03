@@ -16,6 +16,17 @@ router.post("/post/", verifyToken, postController.createPost);
 router.put("/post/:postId", verifyToken, postController.updatePost);
 router.delete("/post/:postId", verifyToken, postController.deletePost);
 
+//Comments
+router.get("/post/:postId", postController.getPostComments);
 router.post("/post/:postId/comment", verifyToken, postController.createComment);
-
+router.put(
+  "/post/:postId/comment/:commentId",
+  verifyToken,
+  postController.editComment,
+);
+router.delete(
+  "/post/:postId/comment/:commentId",
+  verifyToken,
+  postController.deleteComment,
+);
 export default router;

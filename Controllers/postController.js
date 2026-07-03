@@ -4,7 +4,7 @@ import "dotenv/config";
 
 const getAllPosts = async (req, res) => {
   const posts = await prisma.post.findMany();
-  res.json(posts);
+  res.json({ posts });
 };
 
 const getPostById = async (req, res) => {
@@ -13,6 +13,14 @@ const getPostById = async (req, res) => {
       id: Number(req.params.postId),
     },
   });
+  res.json({ post });
+};
+
+const getPostComments = async (req, res) => {
+  const comments = await prisma.comment.findMany({
+    where: { postId: Number(req.params.postId) },
+  });
+  res.json({ comments });
 };
 
 const createComment = async (req, res) => {
@@ -31,6 +39,46 @@ const createComment = async (req, res) => {
       res.json({
         message: "Comment added...",
         comment: newComment,
+        authData,
+      });
+    }
+  });
+};
+
+const editComment = async (req, res) => {
+  jwt.verify(req.token, process.env.JWT_SECRET, async (err, authData) => {
+    if (err) {
+      res.status(403).json({ message: "Invalid token" });
+    } else {
+      const comment = req.body.commentContent;
+      const editedComment = await prisma.comment.update({
+        where: {
+          id: Number(req.params.commentId),
+        },
+        data: {
+          content: comment,
+        },
+      });
+      res.json({
+        message: "Comment edited...",
+        comment: editedComment,
+        authData,
+      });
+    }
+  });
+};
+
+const deleteComment = async (req, res) => {
+  jwt.verify(req.token, process.env.JWT_SECRET, async (err, authData) => {
+    if (err) {
+      res.status(403).json({ message: "Invalid token" });
+    } else {
+      const deletedComment = await prisma.comment.delete({
+        where: { id: Number(req.params.commentId) },
+      });
+      res.json({
+        message: "Comment deleted...",
+        comment: deletedComment,
         authData,
       });
     }
@@ -107,4 +155,6 @@ export {
   createPost,
   editPost,
   deletePost,
+  editComment,
+  deleteComment,
 };
