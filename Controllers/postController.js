@@ -151,6 +151,7 @@ const deletePost = async (req, res) => {
 export {
   getAllPosts,
   getPostById,
+  getPostComments,
   createComment,
   createPost,
   editPost,

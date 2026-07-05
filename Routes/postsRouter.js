@@ -13,7 +13,7 @@ router.get("/", postController.getAllPosts);
 router.get("/post/:postId", postController.getPostById);
 //Post CRUD - Admin only
 router.post("/post/", verifyToken, postController.createPost);
-router.put("/post/:postId", verifyToken, postController.updatePost);
+router.put("/post/:postId", verifyToken, postController.editPost);
 router.delete("/post/:postId", verifyToken, postController.deletePost);
 
 //Comments
