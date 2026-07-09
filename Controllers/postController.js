@@ -27,25 +27,43 @@ const getPostComments = async (req, res) => {
 };
 
 const createComment = async (req, res) => {
-  jwt.verify(req.token, process.env.JWT_SECRET, async (err, authData) => {
-    if (err) {
-      res.status(403).json({ message: "Invalid token" });
-    } else {
-      const comment = req.body.commentContent;
-      const newComment = await prisma.comment.create({
-        data: {
-          authorId: authData.user.id, //get user id
-          content: comment,
-          postId: Number(req.params.postId),
-        },
-      });
-      res.json({
-        message: "Comment added...",
-        comment: newComment,
-        authData,
-      });
+  try {
+    const authData = jwt.verify(req.token, process.env.JWT_SECRET);
+
+    const comment = req.body.content;
+
+    if (!comment || comment.trim() === "") {
+      return res.status(400).json({ message: "Message cannot be empty" });
     }
-  });
+
+    const newComment = await prisma.comment.create({
+      data: {
+        authorId: authData.user.id,
+        content: comment,
+        postId: Number(req.params.postId),
+      },
+    });
+
+    return res.status(201).json({
+      message: "Comment added",
+      comment: newComment,
+      authData,
+    });
+  } catch (error) {
+    // Tutaj wpadną błędy zarówno z jwt.verify (zły token), jak i z Prismy (błąd bazy)
+    console.error("Error in createComment:", error);
+
+    // Jeśli błąd pochodzi z biblioteki JWT (np. JsonWebTokenError lub TokenExpiredError)
+    if (
+      error.name === "JsonWebTokenError" ||
+      error.name === "TokenExpiredError"
+    ) {
+      return res.status(403).json({ message: "Invalid or expired token" });
+    }
+
+    // Każdy inny nieprzewidziany błąd serwera
+    return res.status(500).json({ message: "Internal server error" });
+  }
 };
 
 const editComment = async (req, res) => {
