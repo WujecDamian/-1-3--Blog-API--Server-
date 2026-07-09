@@ -125,11 +125,14 @@ const createPost = async (req, res) => {
     } else {
       const content = req.body.content;
       const title = req.body.title;
+      const isPublic = req.body.isPublic;
+
       const newPost = await prisma.post.create({
         data: {
           authorId: authData.user.id,
           content,
           title,
+          published: isPublic,
         },
       });
       res.json({
