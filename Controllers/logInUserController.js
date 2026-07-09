@@ -26,7 +26,7 @@ const logInUser = async (req, res, next) => {
             if (err) {
               res.json({ err });
             }
-            res.json({ token });
+            res.json({ token, user });
           },
         );
       }
