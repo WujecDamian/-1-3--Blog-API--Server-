@@ -183,6 +183,7 @@ const deletePost = async (req, res) => {
 
 export {
   getAllPosts,
+  getAllPublicPosts,
   getPostById,
   getPostComments,
   createComment,
