@@ -9,6 +9,8 @@ import verifyToken from "../middleware/verifyToken.js";
 
 //Homepage
 router.get("/", postController.getAllPosts);
+router.get("/publicPosts", postController.getAllPublicPosts);
+
 //Specific post page
 router.get("/post/:postId", postController.getPostById);
 //Post CRUD - Admin only

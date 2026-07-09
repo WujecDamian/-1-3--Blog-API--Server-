@@ -6,6 +6,14 @@ const getAllPosts = async (req, res) => {
   const posts = await prisma.post.findMany();
   res.json({ posts });
 };
+const getAllPublicPosts = async (req, res) => {
+  const posts = await prisma.post.findMany({
+    where: {
+      published: true,
+    },
+  });
+  res.json({ posts });
+};
 
 const getPostById = async (req, res) => {
   const post = await prisma.post.findUnique({
@@ -13,7 +21,11 @@ const getPostById = async (req, res) => {
       id: Number(req.params.postId),
     },
     include: {
-      comments: true,
+      comments: {
+        include: {
+          author: true,
+        },
+      },
     },
   });
   res.json({ post });
