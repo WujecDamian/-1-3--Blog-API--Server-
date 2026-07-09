@@ -151,11 +151,14 @@ const editPost = async (req, res) => {
     } else {
       const content = req.body.content;
       const title = req.body.title;
+      const published = req.body.isPublic;
+
       const editedPost = await prisma.post.update({
         where: { id: Number(req.params.postId) },
         data: {
           content,
           title,
+          published,
         },
       });
       res.json({
