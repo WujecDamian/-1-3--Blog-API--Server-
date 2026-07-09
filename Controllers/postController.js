@@ -12,6 +12,9 @@ const getPostById = async (req, res) => {
     where: {
       id: Number(req.params.postId),
     },
+    include: {
+      comments: true,
+    },
   });
   res.json({ post });
 };
